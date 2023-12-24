@@ -18,3 +18,17 @@ jobs:
 
       - name: "Pushing to Docker hub"
         run: docker push ${{ secrets.Docker_Username }}/proj
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    needs: build
+
+    steps:
+      - name: "Deploy to web app service"
+        run: minikube.exe start
+          kubectl apply -f deployment.yaml
+          kubectl get pods
+          kubectl apply -f NodePort.service.yaml
+          kubectl get nodes
+          minikube service node-port-service
