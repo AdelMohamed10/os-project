@@ -26,7 +26,8 @@ jobs:
 
     steps:
       - name: "Deploy to web app service"
-        run: minikube.exe start
+        run: |
+          minikube.exe start
           kubectl apply -f deployment.yaml
           kubectl get pods
           kubectl apply -f NodePort.service.yaml
