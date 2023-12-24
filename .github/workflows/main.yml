@@ -8,15 +8,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: "Login to Docker hub"
+      - name: Login to Docker hub
         run: docker login --username ${{ secrets.Docker_Username }} --password ${{ secrets.Docker_Token }}
 
-      - name: "Building docker image"
+      - name: Building docker image
         run: docker build -t ${{ secrets.Docker_Username }}/proj .
 
-      - name: "Pushing to Docker hub"
+      - name: Pushing to Docker hub
         run: docker push ${{ secrets.Docker_Username }}/proj
 
   deploy:
@@ -25,10 +26,11 @@ jobs:
     needs: build
 
     steps:
-      - name: "Deploy to web app service"
+      - name: Deploy to web app service
         run: |
+          minikube start
           kubectl apply -f deployment.yaml
           kubectl get pods
           kubectl apply -f NodePort.service.yaml
           kubectl get nodes
-          minikube service node-port-service
+          minikube service node-port-service --url
