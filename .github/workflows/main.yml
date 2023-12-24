@@ -26,12 +26,19 @@ jobs:
     needs: build
 
     steps:
-      - name: Deploy to web app service
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          path: ./AdelMohamed10/os-project/deployment.yaml
+
+      - name: Starting minikube
         run: |
           minikube start
+      - name: Deploy to web app service
+        run: |
           ls -R
           cat deployment.yaml
-          kubectl apply -f deployment.yaml
+          kubectl apply -f ./deployment.yaml
           kubectl get pods
           kubectl apply -f NodePort.service.yaml
           kubectl get nodes
