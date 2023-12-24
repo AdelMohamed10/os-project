@@ -29,6 +29,8 @@ jobs:
       - name: Deploy to web app service
         run: |
           minikube start
+          ls -R
+          cat deployment.yaml
           kubectl apply -f deployment.yaml
           kubectl get pods
           kubectl apply -f NodePort.service.yaml
